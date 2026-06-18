@@ -1,4 +1,5 @@
 import sys
+import os
 import cv2
 
 from PyQt6.QtWidgets import (
@@ -7,6 +8,11 @@ import numpy as np
 
 from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QPixmap, QImage
+
+
+def resource_path(filename):
+    base = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base, filename)
 
 
 
@@ -21,7 +27,7 @@ class MainMenu(QWidget):
         self.logo.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.logo.setMinimumHeight(200)
 
-        pixmap = QPixmap("LogoCNES200.jpg")
+        pixmap = QPixmap(resource_path("LogoCNES200.jpg"))
 
         self.logo.setPixmap(pixmap)
 
@@ -107,7 +113,7 @@ class SimulationPage(QWidget):
         self.layout = QVBoxLayout()
         self.logo = QLabel()
         self.logo.setMinimumHeight(75)
-        pixmap = QPixmap("LogoCNES75.jpg")
+        pixmap = QPixmap(resource_path("LogoCNES75.jpg"))
                 
 
         self.logo.setPixmap(pixmap)
@@ -116,6 +122,20 @@ class SimulationPage(QWidget):
 
         self.label = QLabel()
         self.layout.addWidget(self.label)
+
+        from PyQt6.QtWidgets import QHBoxLayout
+        btn_row = QHBoxLayout()
+
+        self.btn_stop = QPushButton("⏹ Terminer la prise")
+        self.btn_stop.clicked.connect(self.stop_sweep)
+        btn_row.addWidget(self.btn_stop)
+
+        self.btn_back = QPushButton("↩ Retour au menu")
+        self.btn_back.clicked.connect(self.go_to_menu)
+        btn_row.addWidget(self.btn_back)
+
+        self.layout.addLayout(btn_row)
+
         self.setLayout(self.layout)
 
         self.cap = None
@@ -144,7 +164,20 @@ class SimulationPage(QWidget):
         self.buffer = np.zeros((self.height, self.width, 3), dtype=np.uint8)
         self.col_index = 0
         self.sweep_done = False
+        self.btn_stop.setEnabled(True)
         self.timer.start(30)
+
+    def stop_sweep(self):
+        if not self.sweep_done:
+            self.timer.stop()
+            self.sweep_done = True
+            self.btn_stop.setEnabled(False)
+            self.save_image()
+
+    def go_to_menu(self):
+        self.timer.stop()
+        self.sweep_done = True
+        self.stack.setCurrentIndex(0)
 
     # def update_frame(self):
     #     if self.cap is None:
@@ -189,7 +222,6 @@ class SimulationPage(QWidget):
             self.save_image()
 
     def save_image(self):
-        import os
         from datetime import datetime
         filename = datetime.now().strftime("fauchee_%Y%m%d_%H%M%S.png")
         path = os.path.join(self.save_folder, filename)
