@@ -8,7 +8,7 @@ import numpy as np
 from datetime import datetime
 
 APP_TITLE = "Simulation Satellite CNES"
-LOGO_FILE = "LogoCNES200.jpg"
+LOGO_FILE = "../logos/LogoCNES200.jpg"
 
 
 def resource_path(filename):

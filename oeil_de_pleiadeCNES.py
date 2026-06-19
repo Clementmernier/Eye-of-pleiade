@@ -27,7 +27,7 @@ class MainMenu(QWidget):
         self.logo.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.logo.setMinimumHeight(200)
 
-        pixmap = QPixmap(resource_path("LogoCNES200.jpg"))
+        pixmap = QPixmap(resource_path("logos/LogoCNES200.jpg"))
 
         self.logo.setPixmap(pixmap)
 
@@ -113,7 +113,7 @@ class SimulationPage(QWidget):
         self.layout = QVBoxLayout()
         self.logo = QLabel()
         self.logo.setMinimumHeight(75)
-        pixmap = QPixmap(resource_path("LogoCNES75.jpg"))
+        pixmap = QPixmap(resource_path("logos/LogoCNES75.jpg"))
                 
 
         self.logo.setPixmap(pixmap)
