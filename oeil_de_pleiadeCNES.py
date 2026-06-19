@@ -141,7 +141,7 @@ class SimulationPage(QWidget):
         self.cap = None
         self.save_folder = "."
 
-        self.width = 1800
+        self.width = 1000
         self.height = 300
 
         self.buffer = np.zeros((self.height, self.width, 3), dtype=np.uint8)
